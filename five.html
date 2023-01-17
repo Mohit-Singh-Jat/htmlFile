@@ -1,0 +1,314 @@
+<html>
+<head>
+	<TITLE>AngularJS</TITLE>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+	<script type="text/javascript" src="five.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myController">
+	<div class="container">
+		<div class="row">
+			<hr>
+			<div class="col-md-8">
+				<h1>Employees Details</h1>
+			</div>
+			<div class="col-md-4">
+				<button type="button" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add">Add User</button>
+			</div>
+			<span class="clearfix"></span>
+			<hr>
+		</div>
+		
+		<div class="row">
+            <label for="inputName" class="form-label">Filter </label>
+            <input type="text" class="form-control" ng-model="searchtext"  >
+
+			<table class="table table-striped">
+			    <thead>
+			      <tr>
+			        <th >Name</th>
+                    <th>Email</th>
+                    <th>Phone No</th>
+                    <th>Verification</th>
+                    <th>Gender</th>
+		        </tr>
+			    </thead>
+			    <tbody>
+			      <tr ng-repeat="user in users | orderBy : 'Name' | filter : searchtext">
+                    <td>{{ user.Name }}</td>
+                    <td>{{ user.email}}</td>
+                    <td>{{ user.Phone }}</td>
+                    <td>{{ user.Verification }}</td>
+                    <td>{{ user.myVar }}</td>
+			        <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#view" ng-click="selectUser(user)">View</button>
+			        	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#edit" ng-click="selectUser(user)">Edit</button>
+                        <button class="btn btn-danger"  ng-click="delete()">Delete</button>
+		        	</td>
+			      </tr>
+			    </tbody>
+		  	</table>
+		</div>
+	</div>
+
+<!-- Modal -->
+<div class="modal fade" id="add" role="dialog">
+    <div class="modal-dialog modal-md">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">ADD USER</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" role="form" name="data" >
+                    <div class="form-group">
+			      <label class="control-label col-sm-3" for="name">First Name</label>
+			      <div class="col-sm-7">
+			        <input type="text" class="form-control" name="Name" id="Name_id" placeholder="Enter First Name" pattern="[A-Za-z]{1,32}" ng-model="newUser.Name" required>
+                   
+                    <span style="color:red" ng-show="data.Name.$touched && data.Name.$invalid ">The name is required.</span>
+			      </div>
+			    </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Phone</label>
+                    <div class="col-sm-7">
+                      <input type="number" class="form-control" name="Phone" id="Phone_id" placeholder="Phone Number" ng-model="newUser.Phone" required>
+                     
+                      <span style="color:red" ng-show="data.Phone.$touched && data.Phone.$invalid ">The Phone is required.</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name"> Confirm Phone</label>
+                    <div class="col-sm-7">
+                      <input type="number" class="form-control" name="ConfirmPhone" id="ConfirmPhone_id" placeholder="Phone Number" ng-model="newUser.ConfirmPhone" required>
+                     
+                      <span style="color:red" ng-show="data.ConfirmPhone.$touched && data.ConfirmPhone.$invalid ">The Phone is required.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Email</label>
+                    <div class="col-sm-7">
+                      <input type="email" class="form-control" name="email" id="email_id" placeholder="EmailID" ng-model="newUser.email" required>
+                     
+                      <span style="color:red" ng-show="data.email.$touched && data.email.$invalid ">The Email is required.</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Confirm Email ID</label>
+                    <div class="col-sm-7">
+                      <input type="email" class="form-control" name="ConfirmEmail" id="ConfirmEmail_id" placeholder="Confirm Email" ng-model="newUser.ConfirmEmail" required>
+                     
+                      <span style="color:red" ng-show="data.ConfirmEmail.$touched && data.ConfirmEmail.$invalid ">The ConfirmEmail is required.</span>
+                    </div>
+                  </div>
+                
+                  <div class="col-md-4">
+                    <label for="inputState" class="form-label">Verification</label>
+                    <select id="inputState" class="form-select" ng-model="newUser.Verification" name="Verification" required>
+                      <option >Choose..</option>
+                      <option >Send By a Mail</option>
+                      <option>Send By a Message</option>
+                      <option>Send By a Phone</option>
+      
+                    </select>
+                    <span style="color:red" ng-show="data.Verification.$touched && data.Verification.$invalid ">The Verification is required.</span>
+                  </div>
+
+                  <div class="col-md-2">
+                    <label for="inputradio" class="form-label">Gender</label></br>
+                    
+                    <input type="radio" ng-model="newUser.myVar" value="Male" name="Gender" required>Male
+                    
+                  <input type="radio" ng-model="newUser.myVar" value="Female" name="Gender" required >Female
+                  </div>
+                </br>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    
+                    <button type="submit" class="btn btn-info" ng-click="saveUser()" data-dismiss="modal">Save</button>
+                  </div>    
+<!--ng-disabled ="data.$invalid.$data-bs-dismiss"-->	    
+		  </form>     
+          </div>
+        </div>   
+      </div>   
+    </div>
+  </div>
+  <!-- Modal -->
+<div class="modal fade" id="edit" role="dialog">
+    <div class="modal-dialog modal-md">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">EDIT</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" role="form" name="data1">
+                    <div class="form-group">
+			      <label class="control-label col-sm-3" for="name">First Name</label>
+			      <div class="col-sm-7">
+			        <input type="text" class="form-control" name="Name" id="Name_id" placeholder="Enter First Name" ng-model="clickedUser.Name" required>
+                   
+                    <span style="color:red" ng-show="data1.Name.$touched && data1.Name.$invalid ">The name is required.</span>
+			      </div>
+			    </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Phone</label>
+                    <div class="col-sm-7">
+                      <input type="number" class="form-control" name="Phone" id="Phone_id" placeholder="Phone Number" ng-model="clickedUser.Phone" required>
+                     
+                      <span style="color:red" ng-show="data1.Phone.$touched && data1.Phone.$invalid ">The Phone is required.</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name"> Confirm Phone</label>
+                    <div class="col-sm-7">
+                      <input type="number" class="form-control" name="ConfirmPhone" id="ConfirmPhone_id" placeholder="Phone Number" ng-model="clickedUser.ConfirmPhone" required>
+                     
+                      <span style="color:red" ng-show="data1.ConfirmPhone.$touched && data1.ConfirmPhone.$invalid ">The Phone is required.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Email</label>
+                    <div class="col-sm-7">
+                      <input type="email" class="form-control" name="email" id="email_id" placeholder="EmailID" ng-model="clickedUser.email" required>
+                     
+                      <span style="color:red" ng-show="data1.email.$touched && data1.email.$invalid ">The Email is required.</span>
+
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Confirm Email ID</label>
+                    <div class="col-sm-7">
+                      <input type="email" class="form-control" name="ConfirmEmail" id="ConfirmEmail_id" placeholder="Confirm Email" ng-model="clickedUser.ConfirmEmail" onblur="confirmEmail()" required>
+                     
+                      <span style="color:red" ng-show="data1.ConfirmEmail.$touched && data1.ConfirmEmail.$invalid ">The ConfirmEmail is required.</span>
+                    </div>
+                  </div>
+                
+                  <div class="col-md-4">
+                    <label for="inputState" class="form-label">Verification</label>
+                    <select id="inputState" class="form-select" ng-model="clickedUser.Verification" name="Verification" required>
+                      <option >Choose..</option>
+                      <option >Send By a Mail</option>
+                      <option>Send By a Message</option>
+                      <option>Send By a Phone</option>
+      
+                    </select>
+                    <span style="color:red" ng-show="data1.Verification.$touched && data1.Verification.$invalid ">The Verification is required.</span>
+                  </div>
+
+                  <div class="col-md-2">
+                    <label for="inputradio" class="form-label">Gender</label></br>
+                    
+                    <input type="radio" ng-model="clickedUser.myVar" value="Male" name="Gender" required>Male
+                    
+                  <input type="radio" ng-model="clickedUser.myVar" value="Female" name="Gender" required>Female
+                  </div>
+                </br>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info" ng-click="updateUser(user)" data-dismiss="modal">Update</button>
+                  </div>     
+		  </form>         
+          </div>
+        </div>       
+      </div>     
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="view" role="dialog">
+    <div class="modal-dialog modal-md">   
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">VIEW</h4>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal" role="form" name="data2">
+                    <div class="form-group">
+			      <label class="control-label col-sm-3" for="name">First Name</label>
+			      <div class="col-sm-7">
+			        <input type="text" class="form-control" name="Name" disabled id="Name_id" placeholder="Enter First Name" ng-model="clickedUser.Name" required>
+                   
+                    <span style="color:red" ng-show="data2.Name.$touched && data2.Name.$invalid ">The name is required.</span>
+			      </div>
+			    </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Phone</label>
+                    <div class="col-sm-7">
+                      <input type="number" class="form-control" name="Phone" disabled id="Phone_id" placeholder="Phone Number" ng-model="clickedUser.Phone" required>
+                     
+                      <span style="color:red" ng-show="data2.Phone.$touched && data2.Phone.$invalid ">The Phone is required.</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name"> Confirm Phone</label>
+                    <div class="col-sm-7">
+                      <input type="number" class="form-control" name="ConfirmPhone" disabled id="ConfirmPhone_id" placeholder="Phone Number" ng-model="clickedUser.ConfirmPhone" required>
+                     
+                      <span style="color:red" ng-show="data2.ConfirmPhone.$touched && data2.ConfirmPhone.$invalid ">The Phone is required.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Email</label>
+                    <div class="col-sm-7">
+                      <input type="email" class="form-control" name="email" disabled id="email_id" placeholder="EmailID" ng-model="clickedUser.email" required>
+                     
+                      <span style="color:red" ng-show="data2.email.$touched && data2.email.$invalid ">The Email is required.</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-sm-3" for="name">Confirm Email ID</label>
+                    <div class="col-sm-7">
+                      <input type="email" class="form-control" name="ConfirmEmail" disabled id="ConfirmEmail_id" placeholder="Confirm Email" ng-model="clickedUser.ConfirmEmail" required>
+                     
+                      <span style="color:red" ng-show="data2.ConfirmEmail.$touched && data2.ConfirmEmail.$invalid ">The ConfirmEmail is required.</span>
+                    </div>
+                  </div>
+                
+                  <div class="col-md-4">
+                    <label for="inputState" class="form-label">Verification</label>
+                    <select id="inputState" class="form-select" ng-model="clickedUser.Verification" name="Verification" disabled>
+                      <option >Choose..</option>
+                      <option >Send By a Mail</option>
+                      <option>Send By a Message</option>
+                      <option>Send By a Phone</option>
+      
+                    </select>
+                    <span style="color:red" ng-show="data2.Verification.$touched && data2.Verification.$invalid ">The Verification is required.</span>
+                  </div>
+
+                  <div class="col-md-2">
+                    <label for="inputradio" class="form-label">Gender</label></br>
+                    
+                    <input type="radio" ng-model="clickedUser.myVar" value="Male" name="Gender" disabled>Male
+                    
+                  <input type="radio" ng-model="clickedUser.myVar" value="Female" name="Gender" disabled >Female
+                  </div>
+                </br>			    
+		  </form>          
+          </div>
+        </div>       
+      </div>     
+    </div>
+  </div>
+</body>
+</html>
